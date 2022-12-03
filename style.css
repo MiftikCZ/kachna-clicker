@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Poppins:wght@200;400&family=Roboto:ital,wght@0,300;0,400;0,500;1,400&family=Signika+Negative:wght@500;600;700&display=swap');
+@font-face {
+    font-family: noridcl;
+    src: url(NORDIC\ LIGHT.ttf);
+}
+* {
+    box-sizing: border-box;
+    font-family: "Signika Negative";
+}
+body {
+    background: hsl(40,37%,48%);
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display:inline-block;
+    width: 100%;
+}
+#root {
+    max-height: 100vh;
+    height: 100%;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+}
+
+[frtext] {
+    text-shadow: #000 0 0 3px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+
+#kachnaclick {
+    display: block;
+}
+#kachnaclick img {
+    box-sizing: content-box;
+    border: 8px #0003 solid;
+    user-select: none;
+    padding: 2em 2.1em;
+    font-size: 10px;
+    border-radius:20px;
+}
+
+#kachnaclick img:active {
+    animation: kachnaclick 250ms forwards;
+}
+
+@keyframes kachnaclick {
+    0% {
+        background: initial;
+    }
+
+    50% {
+        background: red;
+    }
+
+    100% {
+        background: initial;
+    }
+}
+.gamediv {
+    justify-content: center;
+    align-items: center;
+}
+.maingame {
+    background: #0002;
+    border-radius: 20px;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+#count {
+    color: azure;
+    text-shadow: #000 0px 0px 6px;
+    font-weight: bold;
+}
+
+.bottombar {
+    font-size: 28px;
+    background: #222228 !important;
+    color: #cecece;
+    width: 100%;
+    justify-content: space-around;
+    user-select: none;
+    border-radius: 40px 40px 0 0 !important;
+    display: inline-block;
+}
+.btmbtn {
+    padding: 24px 8px !important;
+    width: 100% !important;
+    height: 100% !important;
+    text-align: center;
+}
+[factive='true'] {
+    border-bottom: #0004 2px solid !important;
+    padding: 0px 18px !important;
+}
+
+
+.shopdiv {
+    display: flex;
+    overflow-y: auto;
+    justify-content: start;
+    align-items: flex-start;
+    position: sticky;
+    width: 100%;
+    padding: 18px;
+    background: #8c502a;
+    border:#0003 8px solid;
+    margin-bottom: 8px;
+    height: 100vh;
+}
+
+.shopdivmain {
+    width: 100% !important;
+    display: inline-block;
+}
+
+center {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+.badprice {
+    color: rgb(210, 51, 51) !important;
+}
+
+.validprice {
+    color: rgb(37, 185, 62) !important;
+}
+
+.buybtn {
+    user-select: none;
+    cursor: default;
+}
