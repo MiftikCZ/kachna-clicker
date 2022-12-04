@@ -1,4 +1,4 @@
 # kachna-clicker
 suprová gameska!
 
-**jednoduchá hra udělaná s mojim frameworkem DirtyScript**
+**jednoduchá hra udělaná s mím custom frameworkem DirtyScript**
