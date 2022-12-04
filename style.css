@@ -1,19 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Poppins:wght@200;400&family=Roboto:ital,wght@0,300;0,400;0,500;1,400&family=Signika+Negative:wght@500;600;700&display=swap');
-@font-face {
-    font-family: noridcl;
-    src: url(NORDIC\ LIGHT.ttf);
-}
 * {
     box-sizing: border-box;
-    font-family: "Signika Negative";
 }
 body {
-    background: hsl(40,37%,48%);
     padding: 0;
     margin: 0;
     height: 100vh;
     display:inline-block;
     width: 100%;
+    font-family: "Signika Negative";
 }
 #root {
     max-height: 100vh;

@@ -1,14 +1,8 @@
 import { lexer, isCharSame } from "./lexer_list.js"
 
 
-var settings = {
-    string: false,
-    currentString: "",
-    syntax: "",
-    workSpace: "global",
-    thisWorkSpace: "",
-    countWorkspace: true,
-}
+var settings = {}
+
 
 export var dScript = {
     create: function (text, workspace = "global") {
@@ -44,26 +38,25 @@ export var dScript = {
 
                         //add string
                         if (settings.string) settings.currentString += char
-
+                        
 
                         //SYNTAX
                         if (isCharSame(char, lexer.closeFunc) && !settings.string) {
                             settings.syntax += "]})"
                         } else if (isCharSame(char, lexer.openFunc) && !settings.string) {
-
                             settings.syntax += `(workspace=>{return [`
-
                         } else {
                             //get workspace
                             if (!settings.string) {
-                                if (ch == 1 && char !== ":" && char !== ")" && char !== ";") {
+                                if ((char == "," || char == "|" || settings.syntax.at(-1)=="[" || ch == 1) && char !== ":" && char!==";" && char !== ")" && isNaN(char)) {
+                                    char= char.split(",").join("").split(";").join("").split("|").join("")
                                     settings.syntax += workspace + "."
                                 }
 
 
                                 //check for workspace
 
-                                if (char == ":" && ch == 1) {
+                                if (char == ":" && !settings.string) {
                                     settings.syntax += "workspace."
                                     char = ""
                                 }
@@ -148,6 +141,7 @@ export var functionBuilder = (main, data, addTextFirst, addTextLast) => {
 
 
 export var Global = {}
+Global.String = func(main => `${main.join("")}`)
 Global.repeat = func(main => {
     return functionBuilder(main, {
         len: main.len || 1,
@@ -197,3 +191,14 @@ Global.repeat = func(main => {
     }),
 })
 
+export var joinObject = (data) => {
+    let r = {}
+    data.forEach(e => { r={
+        ...r,
+        ...e
+    }})
+    return r
+}
+
+
+Global.ToStr = Global.String

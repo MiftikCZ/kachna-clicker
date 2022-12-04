@@ -4,9 +4,19 @@ import { global } from "./dscript/frawem.dscript.js";
 import { main } from "./game.js"
 
 
+export const RAINBOW = (text = ()=>["RAINBOW"]) => {
+    let i=0
+    text = text().join("")
+    return text.split("").map(ch => {
+        i+=(360/text.length)
+        return `<span style="font-weight:700;color:hsl(${i}, 60%,55%)">${ch}</span>`
+    }).join("")
+}
+
 const price = (_price,id) => `
 view(
     :class("buybtn")
+    :width("fit-content")
     :background("#222228")
     :padding(
         String("4px")
@@ -32,18 +42,22 @@ view(
             :fvar("shopitem${id}")
             "${_price}"
         )
-    )
+    )    
 )
 `
 
-const shopitem = (Name, _price, id) => `
-edit(
+const shopitem = (Name, _price, id, rainbow=false) => `
+view(
     :class("shopitem shopitem${id}")
     tp(
         :h1(
-            ${price(_price,id)}
-            text(
-                "${Name}"
+            row(
+                ${price(_price,id)}
+                
+                text(
+                    ${rainbow ? `;RAINBOW('RAINBOW')`: ``} 
+                    "${Name}"
+                )
             )
         )
     )
@@ -92,18 +106,19 @@ html(
                 String("btmbtn")
             )
             :id("button_game")
-            text("GAME")
+            faicon("fa-solid fa-arrow-pointer")
         )
         view(
             :class(
                 String("btmbtn")
             )
             :id("button_shop")
-            text("SHOP")
+            faicon("fa-solid fa-store")
         )
     )
 )
 `
+
 
 export var shop = `
 html(
@@ -128,6 +143,12 @@ html(
                 :gap("20px")
                 ${shopitem("+1 each click", "50",1)}
                 ${shopitem("+2 each 1 seconds", "500",2)}
+                ${shopitem("BLUE background", "50,000",3)}
+                ${shopitem("GREEN background", "75,000",4)}
+                ${shopitem("PINK background", "100,000",5)}
+                ${shopitem("PURPLE background", "200,000",6)}
+                ${shopitem("RED background", "500,000",7)}
+                ${shopitem(" background", "500,000",8,true)}
             )
         )
     )

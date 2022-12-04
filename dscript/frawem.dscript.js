@@ -1,6 +1,6 @@
 // frawem components for DirtyScript.js
 
-import { Global, func, functionBuilder, createTagExtend } from "./dscript.js"
+import { Global, func, functionBuilder, createTagExtend, joinObject } from "./dscript.js"
 
 
 
@@ -22,49 +22,28 @@ Global.view = func((main) => {
 <div ${data.id ? `id="${data.id}"` : ""} 
 ${data.class ? `class="${data.class}"` : ""} 
 style="
-background:${data.background || boxStyle.background || "initial"};
-width:${data.width || "initial"};
-max-width:${data.maxWidth || data.width || "initial"};
-max-height:${data.maxHeight || "initial"};
-display:${data.display || "initial"};
-padding:${data.padding || "initial"};
-margin:${data.margin || "initial"};
-border:${boxStyle.border || "initial"};
-border-radius:${boxStyle.border_radius || "initial"};
-width:${boxStyle.width || "initial"};
-height:${data.height || boxStyle.height || "initial"}
+${atr(data,"background","background:%d")}
+${atr(data,"width","width:%d")}
+${atr(data,"maxWidth","max-width:%d")}
+${atr(data,"maxHeight","max-height:%d")}
+${atr(data,"display","display:%d")}
+${atr(data,"padding","padding:%d")}
+${atr(data,"margin","margin:%d")}
+${atr(data,"border","border:%d")}
+${atr(data,"border_radius","border-radius:%d")}
+${atr(data,"height","height:%d")}
 ">${text}</div>`.split("\n").join("")
         })
     }
 }, {
     id: func(main => {return {id:main[0]}}),
     class: func(main => {return {class:main.join(" ")}}),
-    width: func((main) => {
-        return {
-            width: main[0]
-        }
-    }),
+    width: func((main) => {return { width: main[0] }}),
     display: func(main=>{return {display:main[0]}}),
-    max_width: func(main => {
-        return {
-            maxWidth: main[0]
-        }
-    }),
-    height: func((main) => {
-        return {
-            height: main[0]
-        }
-    }),
-    max_height: func((main) => {
-        return {
-            maxHeight: main[0]
-        }
-    }),
-    background: func(main => {
-        return {
-            background: main[0]
-        }
-    }),
+    max_width: func(main => {return {maxWidth: main[0]}}),
+    height: func((main) => {return {height: main[0]}}),
+    max_height: func((main) => {return {maxHeight: main[0]}}),
+    background: func(main => {return {background: main[0]}}),
     padding: func(main => {
         let pad = ""
         switch (main.length) {
@@ -106,12 +85,6 @@ height:${data.height || boxStyle.height || "initial"}
         }
     })
 })
-Global.String = func(main => {
-    return `${main[0]}`
-})
-Global.String_all = func(main => {
-    return `${main.join("")}`
-})
 Global.html = func((main) => {
     return functionBuilder(main, {
         target: main.target || "#root",
@@ -119,13 +92,9 @@ Global.html = func((main) => {
     }, (text, data) => {
         return text
     }, (text, data) => {
-        if(data.setnew) document.querySelector(data.target).innerHTML=""
-        main.forEach(e => {
-            if (typeof (e) == "string" || typeof (e) == "number") {
-                document.querySelector(data.target).innerHTML += e
-            }
-        })
-        return text
+        console.log(text)
+        if(data.setnew) document.querySelector(data.target).innerHTML = text
+        else document.querySelector(data.target).innerHTML += text
     })
 }, {
     target: func(main => {
@@ -143,31 +112,10 @@ Global.column = func(main => {
 }, {
     gap: func(main => {return {gap: main[0]}})
 })
-Global.text_style = func((main) => {
-    let fin = {}
-    for (let i in main) {
-        fin = {
-            ...fin,
-            ...main[i]
-        }
-    }
-    return {
-        style: {
-            ...fin
-        }
-    }
-}, {
-    color: func((main) => {
-        return {
-            color: main[0]
-        }
-    }),
+Global.text_style = func(main => joinObject(main) , {
+    color: func((main) => {return {color: main[0]}}),
 
-    size: func(main => {
-        return {
-            textSize: main[0]
-        }
-    }),
+    size: func(main => {return {textSize: main[0]}}),
 
     weight: func(main => {
         return {
@@ -175,20 +123,7 @@ Global.text_style = func((main) => {
         }
     })
 })
-Global.box_style = func((main) => {
-    let fin = {}
-    for (let i in main) {
-        fin = {
-            ...fin,
-            ...main[i]
-        }
-    }
-    return {
-        boxStyle: {
-            ...fin
-        }
-    }
-}, {
+Global.box_style = func(main => joinObject(main), {
     background: func((main) => {
         return {
             background: main[0]
@@ -209,7 +144,7 @@ Global.box_style = func((main) => {
 
     border: func(main => {
         return {
-            border: `${main[0]} ${main[1]} ${main[2]}`
+            border: `${main[0]} ${main[1]||""} ${main[2]||""}`
         }
     }),
 
@@ -224,16 +159,14 @@ Global.text = func((main, value) => {
         value: main.value,
         id: main.id || "",
         fvar: main.fvar || "",
-        style: main.text_style || {
-            color: undefined,
-            textSize: undefined,
-            textWeight: "inherit"
-        },
-        size: main.size || undefined
     }, (text, data) => {
         return text || data.value
     }, (text, data) => {
-        return `<span frtext ${data.fvar ? `fvar="${data.fvar}"` : ""} id="${data.id}" style="color:${data.style.color};font-size:${data.style.textSize || data.size};font-weight:${data.style.textWeight}">${data.value || text}</span>`
+        return `<span frtext ${data.fvar ? `fvar="${data.fvar}"` : ""} id="${data.id}" style="
+${atr(data,"color", "color:%d")}
+${atr(data,"textSize", "font-size:%d")}
+${atr(data,"textWeight", "font-weight:%d")}
+">${data.value || text}</span>`
     })
 }, {
     id: func(main => {return {id:main[0]}}),
@@ -245,14 +178,17 @@ Global.text = func((main, value) => {
     }),
     size: func(main => {
         return {
-            size: main.join("")
+            textSize: main.join("")
         }
     })
 })
-Global.row = func((main, value) => {
-    if (main && main !== false) {
-        return returnHTML("div", "class='row'", main)
-    }
+Global.row = func(main => {
+    return functionBuilder(main, {}, text => text, 
+        (text,data) => {
+            return `<div style="display:flex;flex-direction:row;${atr(data,"gap","gap: %d")}">${text}</div>`
+        })
+}, {
+    gap: func(main => {return {gap: main[0]}})
 })
 
 Global.flex = func(main => {
@@ -388,11 +324,13 @@ Global.tp = func(main => main.join(""), {
     }) ,
 })
 
+Global.faicon = func(main => `<i class='${main.join(" ")}'></i>`)
+
 
 
 
 // atr(data, "value", "value=%d")
-export const atr = (obj, key, rep, def="") => obj[key] ? rep.replace(/\%d/gi, obj[key]) : def
+export const atr = (obj, key, rep, def="") => obj[key] ? rep.replace(/\%d/gi, rep.endsWith("%d") ? obj[key] + ";" : obj[key]) : def
 
 
 
